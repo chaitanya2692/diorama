@@ -177,19 +177,13 @@ export class LDrawCatalog {
     const template = { meshes: [], lines: [] };
     rawGroup.updateMatrixWorld(true);
     rawGroup.traverse((child) => {
-      if (child.isMesh) {
+      if (child.isMesh || (child.isLineSegments && !child.isConditionalLine)) {
         const geom = child.geometry.clone();
         geom.applyMatrix4(child.matrixWorld);
         geom.applyMatrix4(transform);
         // Strip material groups so a single material applies cleanly to the whole part
         geom.clearGroups();
-        template.meshes.push(geom);
-      } else if (child.isLineSegments && !child.isConditionalLine) {
-        const geom = child.geometry.clone();
-        geom.applyMatrix4(child.matrixWorld);
-        geom.applyMatrix4(transform);
-        geom.clearGroups();
-        template.lines.push(geom);
+        (child.isMesh ? template.meshes : template.lines).push(geom);
       }
     });
 
@@ -199,9 +193,9 @@ export class LDrawCatalog {
 
   /**
    * Places an LDraw part centered at stud coordinates (cx, cz) with its base at plate height `p`.
-   * Stud coordinates run 0..44 across the 44x44 diorama.
+   * Coordinates are local to the parent; apartment placement supplies room offsets.
    */
-  placePart(parent, partName, material, cx, p, cz, { rotX = 0, rotY = 0, rotZ = 0, scale = null, localCoords = false } = {}) {
+  placePart(parent, partName, material, cx, p, cz, { rotX = 0, rotY = 0, rotZ = 0, scale = null } = {}) {
     const template = this.templates.get(partName);
     if (!template) throw new Error(`LDraw template not loaded: ${partName}`);
 
@@ -219,11 +213,7 @@ export class LDrawCatalog {
       group.add(lines);
     }
 
-    if (localCoords) {
-      group.position.set(cx * STUD, p * PLATE, cz * STUD);
-    } else {
-      group.position.set((cx - 16) * STUD, p * PLATE, (cz - 16) * STUD);
-    }
+    group.position.set(cx * STUD, p * PLATE, cz * STUD);
     if (rotX || rotY || rotZ) {
       group.rotation.set(rotX, rotY, rotZ);
     }
