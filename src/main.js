@@ -22,7 +22,10 @@ async function initScene() {
     scene.background = new THREE.Color('#000000');
 
     const nightLights = new THREE.Group();
-    nightLights.add(new THREE.HemisphereLight('#ffffff', '#b9b3a8', 0.8));
+    const nightAmbient = new THREE.HemisphereLight('#ffffff', '#b9b3a8', 0.8);
+    const lightsOffAmbient = new THREE.HemisphereLight('#ffffff', '#b9b3a8', 0.12);
+    lightsOffAmbient.visible = false;
+    nightLights.add(nightAmbient, lightsOffAmbient);
 
     const fill = new THREE.DirectionalLight('#ffffff', 0.8);
     fill.position.set(-12, 12, 6);
@@ -71,9 +74,10 @@ async function initScene() {
     scene.add(dayLights);
 
     let isDay = false;
+    let lightsOff = false;
     let room = null;
     const toggle = document.createElement('button');
-    toggle.className = 'scene-toggle';
+    toggle.className = 'scene-toggle day-toggle';
     toggle.type = 'button';
     toggle.setAttribute('aria-pressed', 'false');
     toggle.textContent = 'Switch to day';
@@ -82,13 +86,39 @@ async function initScene() {
       dayLights.visible = isDay;
       sunrays.visible = isDay;
       nightLights.visible = !isDay;
+      nightAmbient.visible = !isDay && !lightsOff;
+      lightsOffAmbient.visible = !isDay && lightsOff;
+      fill.visible = !isDay && !lightsOff;
+      rim.visible = !isDay && !lightsOff;
       if (room) room.traverse((object) => {
-        if (object.isLight) object.visible = !isDay;
+        if (object.isLight) object.visible = !isDay && !lightsOff;
       });
+      lightsToggle.hidden = isDay;
       toggle.setAttribute('aria-pressed', String(isDay));
       toggle.textContent = isDay ? 'Switch to night' : 'Switch to day';
     });
     root.append(toggle);
+
+    const lightsToggle = document.createElement('button');
+    lightsToggle.className = 'scene-toggle lights-toggle';
+    lightsToggle.type = 'button';
+    lightsToggle.setAttribute('aria-pressed', 'false');
+    lightsToggle.textContent = 'Lights off';
+    lightsToggle.addEventListener('click', () => {
+      lightsOff = !lightsOff;
+      nightLights.visible = !isDay;
+      nightAmbient.visible = !isDay && !lightsOff;
+      lightsOffAmbient.visible = !isDay && lightsOff;
+      fill.visible = !isDay && !lightsOff;
+      rim.visible = !isDay && !lightsOff;
+      if (room) room.traverse((object) => {
+        if (object.isLight) object.visible = !isDay && !lightsOff;
+      });
+      lightsToggle.setAttribute('aria-pressed', String(lightsOff));
+      lightsToggle.textContent = lightsOff ? 'Lights on' : 'Lights off';
+    });
+    root.append(lightsToggle);
+
 
     // True isometric OrthographicCamera matching Isometric LEGO Bedroom Diorama.png framing
     const target = new THREE.Vector3(1.2, 1.05, 1.2);
