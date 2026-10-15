@@ -40,9 +40,14 @@ export const MATERIALS = {
   bedTan: absMat('#c69e67', 0.24),
   bedTanDark: absMat('#ad834e', 0.26),
 
-  // Whites (baseboards, window frames, door, mattress, armchair, stools)
+  // Whites used by the room, door, bedding, and props
   white: absMat('#f6f3ec', 0.22),
   whiteSoft: absMat('#e8e3d9', 0.24),
+
+  // Beige shades for the armchair
+  chairBeige: absMat('#e8d2b0', 0.26),
+  chairBeigeLight: absMat('#f0dfc4', 0.24),
+  chairBeigeDark: absMat('#c79f69', 0.26),
   pillowGray: absMat('#b5b4b0', 0.25),
 
   // Grays & blacks (nightstands, dresser, blanket, legs)
@@ -320,10 +325,10 @@ function buildBed(cat, parent) {
   cat.placeSpan(parent, BRICK_PARTS, M.black, sx1 - 2.5, sz1 - 2.5, sx1 - 0.5, sz1 - 0.5, 2);
 
   const frameMats = [M.bedTan, M.bedTanDark];
-  cat.fillStrip(parent, BRICK_PARTS, frameMats, sx0, sz0, sx1, sz0 + 1, 5, [6, 4, 3, 2], 0);
-  cat.fillStrip(parent, BRICK_PARTS, frameMats, sx0, sz1 - 1, sx1, sz1, 5, [6, 4, 3, 2], 2);
-  cat.fillStrip(parent, BRICK_PARTS, frameMats, sx1 - 1, sz0 + 1, sx1, sz1 - 1, 5, [6, 4, 2], 1);
-  cat.fillStrip(parent, BRICK_PARTS, frameMats, sx0, sz0 + 1, sx0 + 1, sz1 - 1, 5, [6, 4, 2], 3);
+  cat.fillStrip(parent, BRICK_PARTS, M.bedTanDark, sx0, sz0, sx1, sz0 + 1, 5, [6, 4, 3, 2], 0);
+  cat.fillStrip(parent, BRICK_PARTS, M.bedTanDark, sx0, sz1 - 1, sx1, sz1, 5, [6, 4, 3, 2], 2);
+  cat.fillStrip(parent, BRICK_PARTS, M.bedTanDark, sx1 - 1, sz0 + 1, sx1, sz1 - 1, 5, [6, 4, 2], 1);
+  cat.fillStrip(parent, BRICK_PARTS, M.bedTanDark, sx0, sz0 + 1, sx0 + 1, sz1 - 1, 5, [6, 4, 2], 3);
 
   cat.fillStrip(parent, TILE_PARTS, M.bedTan, sx0 + 1, sz0, sx1, sz0 + 1, 8, [6, 4, 3, 2], 1);
   cat.fillStrip(parent, TILE_PARTS, M.bedTan, sx0 + 1, sz1 - 1, sx1, sz1, 8, [6, 4, 3, 2], 2);
@@ -331,7 +336,7 @@ function buildBed(cat, parent) {
 
   for (let course = 0; course < 3; course++) {
     const p = 8 + course * 3;
-    cat.fillStrip(parent, BRICK_PARTS, frameMats, sx0, sz0, sx0 + 1, sz1, p, [6, 4, 3, 2], course * 2);
+    cat.fillStrip(parent, BRICK_PARTS, M.bedTan, sx0, sz0, sx0 + 1, sz1, p, [6, 4, 3, 2], course * 2);
   }
   cat.fillStrip(parent, TILE_PARTS, M.bedTan, sx0, sz0, sx0 + 1, sz1, 17, [6, 4, 2], 1);
 
@@ -576,35 +581,35 @@ function buildFramedWallArt(cat, parent) {
 function buildArmchair(cat, parent) {
   const M = MATERIALS;
 
-  // Angled White Armchair (cx = 22.0, cz = 8.5, rotated -30 deg toward the room)
+  // Angled Beige Armchair (cx = 22.0, cz = 8.5, rotated -30 deg toward the room)
   const chair = new THREE.Group();
   chair.position.set((22.0 - 16) * STUD, 1 * PLATE, (8.5 - 16) * STUD);
   chair.rotation.y = -0.52;
   parent.add(chair);
 
-  // White base feet (p = 0..1)
-  cat.placeSpan(chair, PLATE_PARTS, M.white, -2, -2, 2, 2, 0, { localCoords: true });
+  // Beige base feet (p = 0..1)
+  cat.placeSpan(chair, PLATE_PARTS, M.chairBeigeDark, -2, -2, 2, 2, 0, { localCoords: true });
 
-  // Solid White Lower Chair Base (X in [-2.5..2.5], Z in [-2..2], p = 1..4)
-  cat.placeSpan(chair, BRICK_PARTS, M.white, -2.5, -2, 2.5, 2, 1, { localCoords: true });
+  // Solid Beige Lower Chair Base (X in [-2.5..2.5], Z in [-2..2], p = 1..4)
+  cat.placeSpan(chair, BRICK_PARTS, M.chairBeige, -2.5, -2, 2.5, 2, 1, { localCoords: true });
 
-  // Smooth White Tiled Seat Cushion (X in [-1.5..1.5], Z in [-1..2], p = 4..5)
-  cat.placeSpan(chair, TILE_PARTS, M.whiteSoft, -1.5, -1, 0.5, 1, 4, { localCoords: true });
-  cat.placeSpan(chair, TILE_PARTS, M.whiteSoft, 0.5, -1, 1.5, 1, 4, { localCoords: true });
-  cat.placeSpan(chair, TILE_PARTS, M.white, -1.5, 1, 1.5, 2, 4, { localCoords: true });
+  // Smooth Beige Tiled Seat Cushion (X in [-1.5..1.5], Z in [-1..2], p = 4..5)
+  cat.placeSpan(chair, TILE_PARTS, M.chairBeigeLight, -1.5, -1, 0.5, 1, 4, { localCoords: true });
+  cat.placeSpan(chair, TILE_PARTS, M.chairBeigeLight, 0.5, -1, 1.5, 1, 4, { localCoords: true });
+  cat.placeSpan(chair, TILE_PARTS, M.chairBeigeDark, -1.5, 1, 1.5, 2, 4, { localCoords: true });
 
   // Left Armrest (X in [-2.5..-1.5], Z in [-2..2], p = 4..8)
-  cat.placeSpan(chair, BRICK_PARTS, M.white, -2.5, -2, -1.5, 2, 4, { localCoords: true });
-  cat.placeSpan(chair, TILE_PARTS, M.white, -2.5, -2, -1.5, 2, 7, { localCoords: true });
+  cat.placeSpan(chair, BRICK_PARTS, M.chairBeige, -2.5, -2, -1.5, 2, 4, { localCoords: true });
+  cat.placeSpan(chair, TILE_PARTS, M.chairBeigeLight, -2.5, -2, -1.5, 2, 7, { localCoords: true });
 
   // Right Armrest (X in [1.5..2.5], Z in [-2..2], p = 4..8)
-  cat.placeSpan(chair, BRICK_PARTS, M.white, 1.5, -2, 2.5, 2, 4, { localCoords: true });
-  cat.placeSpan(chair, TILE_PARTS, M.white, 1.5, -2, 2.5, 2, 7, { localCoords: true });
+  cat.placeSpan(chair, BRICK_PARTS, M.chairBeige, 1.5, -2, 2.5, 2, 4, { localCoords: true });
+  cat.placeSpan(chair, TILE_PARTS, M.chairBeigeLight, 1.5, -2, 2.5, 2, 7, { localCoords: true });
 
   // Backrest (X in [-2.5..2.5], Z in [-2..-1], p = 4..10)
-  cat.placeSpan(chair, BRICK_PARTS, M.white, -2.5, -2, 2.5, -1, 4, { localCoords: true });
-  cat.placeSpan(chair, BRICK_PARTS, M.white, -2.5, -2, 2.5, -1, 7, { localCoords: true });
-  cat.placeSpan(chair, TILE_PARTS, M.white, -2.5, -2, 2.5, -1, 10, { localCoords: true });
+  cat.placeSpan(chair, BRICK_PARTS, M.chairBeige, -2.5, -2, 2.5, -1, 4, { localCoords: true });
+  cat.placeSpan(chair, BRICK_PARTS, M.chairBeige, -2.5, -2, 2.5, -1, 7, { localCoords: true });
+  cat.placeSpan(chair, TILE_PARTS, M.chairBeigeDark, -2.5, -2, 2.5, -1, 10, { localCoords: true });
 
 }
 
