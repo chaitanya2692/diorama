@@ -22,9 +22,9 @@ async function initScene() {
     scene.background = new THREE.Color('#000000');
 
     const nightLights = new THREE.Group();
-    nightLights.add(new THREE.HemisphereLight('#ffffff', '#b9b3a8', 1.5));
+    nightLights.add(new THREE.HemisphereLight('#ffffff', '#b9b3a8', 0.8));
 
-    const fill = new THREE.DirectionalLight('#ffffff', 0.18);
+    const fill = new THREE.DirectionalLight('#ffffff', 0.8);
     fill.position.set(-12, 12, 6);
     fill.castShadow = true;
     nightLights.add(fill);
@@ -34,12 +34,11 @@ async function initScene() {
     rim.castShadow = true;
     nightLights.add(rim);
     scene.add(nightLights);
-    scene.environmentIntensity = 0;
 
     const dayLights = new THREE.Group();
     dayLights.add(new THREE.HemisphereLight('#ffffff', '#d4c7af', 1));
     const sunlight = new THREE.DirectionalLight('#fff1cf', 4.0);
-    sunlight.position.set(-280, 420, -1000);
+    sunlight.position.set(-280, 700, -1000);
     sunlight.castShadow = true;
     sunlight.shadow.mapSize.set(1024, 1024);
     sunlight.shadow.camera.left = -10;

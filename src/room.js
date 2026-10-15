@@ -656,7 +656,7 @@ function addWarmRoomLights(room) {
 
     const bulb = new THREE.PointLight('#ff9d2e', 3.5, 3.5, 1.7);
     bulb.position.copy(position);
-    bulb.castShadow = false;
+    bulb.castShadow = true;
     room.add(bulb);
 
     const wash = new THREE.PointLight('#ffb84d', 1.5, 3.5, 1.8);
