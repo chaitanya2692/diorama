@@ -1,6 +1,5 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-import { PLATE } from './ldraw.js';
 import { createRoom } from './room.js';
 import './style.css';
 
@@ -23,7 +22,7 @@ async function initScene() {
     scene.background = new THREE.Color('#000000');
 
     scene.environmentIntensity = 0;
-    scene.add(new THREE.PointLight('#ffffff', 15, 24, 1.2).translateY(30 * PLATE));
+    scene.add(new THREE.HemisphereLight('#ffffff', '#b9b3a8', 1.5));
 
     const fill = new THREE.DirectionalLight('#ffffff', 0.18);
     fill.position.set(-12, 12, 6);

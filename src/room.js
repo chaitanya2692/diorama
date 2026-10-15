@@ -86,7 +86,7 @@ export const MATERIALS = {
     emissive: '#ff8800',
     emissiveIntensity: 0.78,
   }),
-  blanketDark: absMat('#2b2d31', 0.24),
+  blanketDark: absMat('#57585c', 0.24),
   blanketBlack: absMat('#17181b', 0.22),
 };
 
@@ -653,18 +653,16 @@ function buildTallDresser(cat, parent) {
 }
 
 function addWarmRoomLights(room) {
-  for (const sz of [8.5, 27.5]) {
-    const lx = (2.85 - 16) * STUD;
-    const ly = 19.2 * PLATE;
-    const lz = (sz - 16) * STUD;
+  for (const sz of [8, 38]) {
+    const position = new THREE.Vector3((2.85 - 16) * STUD, 21.15 * PLATE, (sz - 16) * STUD);
 
-    const bulb = new THREE.PointLight('#ff9d2e', 9.5, 4.5, 1.7);
-    bulb.position.set(lx, ly, lz);
+    const bulb = new THREE.PointLight('#ff9d2e', 3.5, 3.5, 1.7);
+    bulb.position.copy(position);
     bulb.castShadow = false;
     room.add(bulb);
 
-    const wash = new THREE.PointLight('#ffb84d', 5.0, 2.8, 1.8);
-    wash.position.set(lx - 0.25, ly + 0.15, lz);
+    const wash = new THREE.PointLight('#ffb84d', 1.5, 3.5, 1.8);
+    wash.position.copy(position);
     room.add(wash);
   }
 }
