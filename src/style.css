@@ -29,6 +29,25 @@ body {
     touch-action: none;
 }
 
+.scene-toggle {
+    position: absolute;
+    z-index: 1;
+    top: 1rem;
+    right: 1rem;
+    padding: 0.65rem 0.9rem;
+    border: 1px solid #d9c7a4;
+    border-radius: 0.5rem;
+    background: #24201c;
+    color: #fff8e8;
+    font: inherit;
+    cursor: pointer;
+}
+
+.scene-toggle:focus-visible {
+    outline: 2px solid #fff8e8;
+    outline-offset: 2px;
+}
+
 #status {
     position: absolute;
     inset: 50% auto auto 50%;

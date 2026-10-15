@@ -21,16 +21,75 @@ async function initScene() {
     const scene = new THREE.Scene();
     scene.background = new THREE.Color('#000000');
 
-    scene.environmentIntensity = 0;
-    scene.add(new THREE.HemisphereLight('#ffffff', '#b9b3a8', 1.5));
+    const nightLights = new THREE.Group();
+    nightLights.add(new THREE.HemisphereLight('#ffffff', '#b9b3a8', 1.5));
 
     const fill = new THREE.DirectionalLight('#ffffff', 0.18);
     fill.position.set(-12, 12, 6);
-    scene.add(fill);
+    fill.castShadow = true;
+    nightLights.add(fill);
 
     const rim = new THREE.DirectionalLight('#ffffff', 0.12);
     rim.position.set(-6, 11, -12);
-    scene.add(rim);
+    rim.castShadow = true;
+    nightLights.add(rim);
+    scene.add(nightLights);
+    scene.environmentIntensity = 0;
+
+    const dayLights = new THREE.Group();
+    dayLights.add(new THREE.HemisphereLight('#ffffff', '#d4c7af', 1));
+    const sunlight = new THREE.DirectionalLight('#fff1cf', 4.0);
+    sunlight.position.set(-280, 420, -1000);
+    sunlight.castShadow = true;
+    sunlight.shadow.mapSize.set(1024, 1024);
+    sunlight.shadow.camera.left = -10;
+    sunlight.shadow.camera.right = 10;
+    sunlight.shadow.camera.top = 10;
+    sunlight.shadow.camera.bottom = -10;
+    sunlight.shadow.camera.far = 1500;
+    dayLights.add(sunlight);
+
+    const sunrays = new THREE.Group();
+    for (const x of [-2.6, 7.1]) {
+      const ray = new THREE.Mesh(
+        new THREE.BoxGeometry(2.25, 0.06, 4.5),
+        new THREE.MeshBasicMaterial({
+          color: '#ffe7a8',
+          transparent: true,
+          depthWrite: false,
+        }),
+      );
+      ray.position.set(x, 2.0, -3.6);
+      ray.quaternion.setFromUnitVectors(
+        new THREE.Vector3(0, 0, 1),
+        new THREE.Vector3(0.28, -0.48, 0.83).normalize(),
+      );
+      sunrays.add(ray);
+    }
+
+    sunlight.shadow.camera.updateProjectionMatrix();
+    dayLights.visible = false;
+    scene.add(dayLights);
+
+    let isDay = false;
+    let room = null;
+    const toggle = document.createElement('button');
+    toggle.className = 'scene-toggle';
+    toggle.type = 'button';
+    toggle.setAttribute('aria-pressed', 'false');
+    toggle.textContent = 'Switch to day';
+    toggle.addEventListener('click', () => {
+      isDay = !isDay;
+      dayLights.visible = isDay;
+      sunrays.visible = isDay;
+      nightLights.visible = !isDay;
+      if (room) room.traverse((object) => {
+        if (object.isLight) object.visible = !isDay;
+      });
+      toggle.setAttribute('aria-pressed', String(isDay));
+      toggle.textContent = isDay ? 'Switch to night' : 'Switch to day';
+    });
+    root.append(toggle);
 
     // True isometric OrthographicCamera matching Isometric LEGO Bedroom Diorama.png framing
     const target = new THREE.Vector3(1.2, 1.05, 1.2);
@@ -66,7 +125,7 @@ async function initScene() {
     resizeObserver.observe(root);
     resize();
 
-    const room = await createRoom();
+    room = await createRoom();
     scene.add(room);
     status.remove();
 

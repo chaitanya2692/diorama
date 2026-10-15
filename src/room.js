@@ -185,13 +185,6 @@ function buildWindowAssembly(cat, parent, sx0, sx1) {
   }
   cat.placeSpan(parent, PLATE_PARTS, M.white, sx0, 0.15, sx1, 1.15, 25);
 
-  // Dark backdrop behind the windows for a night scene.
-  cat.placeSpan(parent, BRICK_PARTS, M.black, sx0 + 0.5, -0.6, sx1 - 0.5, 0.4, 8);
-  cat.placeSpan(parent, BRICK_PARTS, M.black, sx0 + 0.5, -0.6, sx1 - 0.5, 0.4, 11);
-  cat.placeSpan(parent, BRICK_PARTS, M.black, sx0 + 0.5, -0.6, sx1 - 0.5, 0.4, 14);
-  cat.placeSpan(parent, BRICK_PARTS, M.black, sx0 + 0.5, -0.6, sx1 - 0.5, 0.4, 17);
-  cat.placeSpan(parent, BRICK_PARTS, M.black, sx0 + 0.5, -0.6, sx1 - 0.5, 0.4, 20);
-  cat.placeSpan(parent, BRICK_PARTS, M.black, sx0 + 0.5, -0.6, sx1 - 0.5, 0.4, 23);
 
   // Thin horizontal white Venetian blind slats with clear gaps showing the blue/green view behind
   for (let p = 9.2; p <= 24.0; p += 1.85) {
