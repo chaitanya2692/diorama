@@ -3,7 +3,7 @@ import { STUD } from './ldraw.js';
 import { buildBedroom } from './rooms/bedroom.js';
 
 // Builders return merged, room-local groups. Place them only after construction.
-export function createApartment(catalog, placements = [{ build: buildBedroom, x: -16, z: -16, rotationY: 0 }]) {
+export function createApartment(catalog, placements = [{ build: buildBedroom }]) {
   const apartment = new THREE.Group();
   for (const { build, x = 0, z = 0, rotationY = 0 } of placements) {
     const room = build(catalog);

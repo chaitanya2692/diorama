@@ -3,7 +3,7 @@ import { LDrawLoader } from 'three/addons/loaders/LDrawLoader.js';
 import { LDrawConditionalLineMaterial } from 'three/addons/materials/LDrawConditionalLineMaterial.js';
 import { LDrawUtils } from 'three/addons/utils/LDrawUtils.js';
 
-// 1 stud = 20 LDU = 0.375 Three.js units (room spans 44x44 studs)
+// 1 stud = 20 LDU = 0.375 Three.js units; room builders choose their display scale.
 // 1 plate = 8 LDU = 0.15 Three.js units (3 plates = 1 brick = 0.45 units)
 export const STUD = 0.375;
 export const LDU = STUD / 20;
@@ -62,6 +62,8 @@ const PART_ORIGINS = {
   '4740.dat': [0, 8, 0],
   '32607.dat': [0, 8, 0],
   '2423.dat': [0, 8, 0],
+  '2412b.dat': [0, 8, 0],
+  '24866.dat': [0, 8, 0],
 
   // 2-plate tall dishes (16 LDU)
   '3960.dat': [0, 16, 0],

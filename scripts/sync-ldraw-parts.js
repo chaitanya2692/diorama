@@ -16,7 +16,7 @@ export const WANTED_PARTS = [
   '3022.dat', '3021.dat', '3020.dat', '3795.dat', '3034.dat', '3031.dat', '3032.dat',
   // Tiles
   '3070b.dat', '3069b.dat', '63864.dat', '2431.dat', '6636.dat', '4162.dat',
-  '3068b.dat', '26603.dat', '87079.dat', '14769.dat', '98138.dat',
+  '3068b.dat', '26603.dat', '87079.dat', '14769.dat', '98138.dat', '2412b.dat',
   // Jumper plates
   '3794b.dat', '87580.dat',
   // Curved & cheese slopes
@@ -27,7 +27,7 @@ export const WANTED_PARTS = [
   // Bars
   '30374.dat', '87994.dat',
   // Plant stems & foliage
-  '37695.dat', '32607.dat', '2423.dat', '24855.dat',
+  '37695.dat', '32607.dat', '2423.dat', '24855.dat', '24866.dat',
   // Door & frame
   '60596.dat', '60616b.dat', '60623.dat',
 ];
