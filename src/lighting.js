@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 
-export function createLighting(scene) {
+export function createLighting(scene, bounds) {
   const nightLights = new THREE.Group();
   const nightAmbient = new THREE.HemisphereLight('#ffffff', '#b9b3a8', 0.8);
   const lightsOffAmbient = new THREE.HemisphereLight('#ffffff', '#b9b3a8', 0.12);
@@ -21,17 +21,25 @@ export function createLighting(scene) {
   const dayLights = new THREE.Group();
   dayLights.add(new THREE.HemisphereLight('#ffffff', '#d4c7af', 1));
   const sunlight = new THREE.DirectionalLight('#fff1cf', 4.0);
-  sunlight.position.set(-280, 700, -1000);
+  const sphere = bounds.getBoundingSphere(new THREE.Sphere());
+  const target = sphere.center;
+  const radius = sphere.radius;
+  sunlight.position.copy(target).add(new THREE.Vector3(-280, 700, 1000));
   sunlight.castShadow = true;
-  sunlight.shadow.mapSize.set(1024, 1024);
-  sunlight.shadow.camera.left = -10;
-  sunlight.shadow.camera.right = 10;
-  sunlight.shadow.camera.top = 10;
-  sunlight.shadow.camera.bottom = -10;
-  sunlight.shadow.camera.far = 1500;
   dayLights.add(sunlight);
 
-  sunlight.shadow.camera.updateProjectionMatrix();
+  for (const light of [sunlight, fill, rim]) {
+    light.target.position.copy(target);
+    scene.add(light.target);
+    const distance = light.position.distanceTo(target);
+    light.shadow.mapSize.set(1024, 1024);
+    Object.assign(light.shadow.camera, {
+      left: -1.1 * radius, right: 1.1 * radius,
+      bottom: -1.1 * radius, top: 1.1 * radius,
+      near: Math.max(0.1, distance - 2 * radius), far: distance + 2 * radius,
+    });
+    light.shadow.camera.updateProjectionMatrix();
+  }
   dayLights.visible = false;
   scene.add(dayLights);
 

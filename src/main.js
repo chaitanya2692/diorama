@@ -23,7 +23,7 @@ async function initScene() {
     const scene = new THREE.Scene();
     scene.background = new THREE.Color('#000000');
 
-    const applyLighting = createLighting(scene);
+    let applyLighting = null;
 
     let isDay = false;
     let lightsOff = false;
@@ -47,7 +47,7 @@ async function initScene() {
     root.append(lightsToggle);
 
     function updateSceneState() {
-      applyLighting(isDay, lightsOff, apartment);
+      applyLighting?.(isDay, lightsOff, apartment);
       toggle.setAttribute('aria-pressed', String(isDay));
       toggle.textContent = isDay ? 'Switch to night' : 'Switch to day';
       lightsToggle.setAttribute('aria-pressed', String(lightsOff));
@@ -56,13 +56,30 @@ async function initScene() {
     }
     updateSceneState();
 
-
-    // True isometric OrthographicCamera matching Isometric LEGO Bedroom Diorama.png framing
-    const target = new THREE.Vector3(1.2, 1.05, 1.2);
-    const initialOffset = new THREE.Vector3(13.0, 14.2, 14.8);
-    const camera = new THREE.OrthographicCamera(-9, 9, 7, -7, 0.1, 100);
-    camera.position.copy(target).add(initialOffset);
+    const catalog = await new LDrawCatalog().init();
+    apartment = createApartment(catalog);
+    scene.add(apartment);
+    const bounds = new THREE.Box3().setFromObject(apartment);
+    applyLighting = createLighting(scene, bounds);
+    updateSceneState();
+    const sphere = bounds.getBoundingSphere(new THREE.Sphere());
+    const target = sphere.center;
+    const radius = sphere.radius;
+    const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.1, radius * 8);
+    camera.position.copy(target).addScaledVector(new THREE.Vector3(-1, 1, -1).normalize(), radius * 4);
     camera.lookAt(target);
+    camera.updateMatrixWorld(true);
+    let paddedHalfX = 0;
+    let paddedHalfY = 0;
+    for (const x of [bounds.min.x, bounds.max.x]) {
+      for (const y of [bounds.min.y, bounds.max.y]) {
+        for (const z of [bounds.min.z, bounds.max.z]) {
+          const corner = new THREE.Vector3(x, y, z).applyMatrix4(camera.matrixWorldInverse);
+          paddedHalfX = Math.max(paddedHalfX, Math.abs(corner.x) * 1.08);
+          paddedHalfY = Math.max(paddedHalfY, Math.abs(corner.y) * 1.08);
+        }
+      }
+    }
 
     const controls = new OrbitControls(camera, renderer.domElement);
     controls.target.copy(target);
@@ -79,11 +96,11 @@ async function initScene() {
       const height = Math.max(root.clientHeight, 1);
       renderer.setSize(width, height, false);
       const aspect = width / height;
-      const baseHalfHeight = aspect < 1.25 ? 10.0 / Math.max(aspect * 0.82, 0.55) : 9.0;
-      camera.left = -baseHalfHeight * aspect;
-      camera.right = baseHalfHeight * aspect;
-      camera.top = baseHalfHeight;
-      camera.bottom = -baseHalfHeight;
+      const halfHeight = Math.max(paddedHalfY, paddedHalfX / aspect);
+      camera.left = -halfHeight * aspect;
+      camera.right = halfHeight * aspect;
+      camera.top = halfHeight;
+      camera.bottom = -halfHeight;
       camera.updateProjectionMatrix();
     }
 
@@ -91,10 +108,6 @@ async function initScene() {
     resizeObserver.observe(root);
     resize();
 
-    const catalog = await new LDrawCatalog().init();
-    apartment = createApartment(catalog);
-    scene.add(apartment);
-    updateSceneState();
     status.remove();
 
     renderer.setAnimationLoop(() => {
