@@ -11,6 +11,7 @@ export const MATERIALS = {
   subFloor: absMat('#704b2e', 0.35),
   wall1: absMat('#dfcfb6', 0.26),
   wall2: absMat('#e7d8bf', 0.27),
+  wallAccent: absMat('#8f6b4d', 0.27),
   wallTop: absMat('#ecdec7'),
   white: absMat('#f6f3ec', 0.22),
   whiteSoft: absMat('#e9e4da'),

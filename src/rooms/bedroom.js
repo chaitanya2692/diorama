@@ -35,7 +35,7 @@ function buildWallsAndWindows(cat, parent) {
   const M = MATERIALS;
   // Each rectangle is a solid wall run; no geometry crosses an opening.
   const runs = [
-    [280, -10, 295, 468, 0, 250],
+    [280, -10, 295, 468, 0, 250, M.wallAccent],
     [0, 453, 280, 468, 0, 90], [0, 453, 280, 468, 220, 250],
     [0, 453, 32, 468, 90, 220], [196, 453, 280, 468, 90, 220],
     [-10, 0, 0, 36, 0, 250], [-10, 111, 0, 131, 0, 250],
@@ -45,10 +45,10 @@ function buildWallsAndWindows(cat, parent) {
     [172, -20, 184, -10, 0, 250], [184, -20, 280, -10, 0, 12],
     [106, -20, 172, -10, 210, 250],
   ];
-  for (const [x0, z0, x1, z1, y0, y1] of runs) {
+  for (const [x0, z0, x1, z1, y0, y1, accent] of runs) {
     for (let y = y0, course = 0; y < y1; y += 12, course++) {
       const height = Math.min(12, y1 - y);
-      const material = y + height === y1 ? M.wallTop : course % 3 === 1 ? M.wall2 : M.wall1;
+      const material = accent ?? (y + height === y1 ? M.wallTop : course % 3 === 1 ? M.wall2 : M.wall1);
       addCourse(cat, parent, BRICK_PARTS, material, x0, z0, x1, z1, y, height);
     }
   }
