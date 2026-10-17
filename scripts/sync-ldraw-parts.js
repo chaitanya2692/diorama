@@ -20,7 +20,8 @@ export const WANTED_PARTS = [
   // Jumper plates
   '3794b.dat', '87580.dat',
   // Curved & cheese slopes
-  '11477.dat', '15068.dat', '24309.dat', '54200.dat', '85984.dat',
+  '11477.dat', '15068.dat', '24309.dat', '54200.dat', '85984.dat', '37352.dat', '1871.dat',
+  '49307.dat',
   // Round bricks, plates, dishes
   '3062b.dat', '3941.dat', '6141.dat', '85861.dat', '4032a.dat', '60474.dat', '11833.dat',
   '2654a.dat', '4740.dat', '43898.dat', '3960.dat',

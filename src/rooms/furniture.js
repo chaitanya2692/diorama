@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { PLATE_PARTS, TILE_PARTS } from '../ldraw.js';
+import { CM, addBlock, addCourse } from './geometry.js';
 import { MATERIALS } from './materials.js';
-import { CM, addCourse, addBlock } from './geometry.js';
 
 export function buildRadiator(cat, parent) {
   const M = MATERIALS;
@@ -41,10 +41,21 @@ export function buildBed(cat, parent) {
   addCourse(cat, parent, TILE_PARTS, M.bedFrame, 70, 180, 280, 340, 36, 4);
   addBlock(cat, parent, M.whiteSoft, 75, 185, 270, 335, 40, 51);
   addCourse(cat, parent, TILE_PARTS, M.whiteSoft, 75, 185, 270, 335, 51, 4);
-  addBlock(cat, parent, M.headboard, 272, 175, 280, 345, 10, 115);
+  addBlock(cat, parent, M.headboard, 266, 175, 280, 345, 10, 115);
+  // for (let z = 170; z < 340; z += 10) {
+  //   cat.placePart(parent, '49307.dat', M.headboard, 273 / 10, 115 / 4, (z + 10) / 10, {
+  //     rotY: Math.PI / 2,
+  //   });
+  // }
+  for (let z = 170; z < 340; z += 10) {
+    cat.placePart(parent, '49307.dat', M.headboard, 273 / 10, 115 / 4.4, (z + 10) / 10, {
+      rotY: Math.PI / 2,
+    });
+  }
+
   // West-facing padded panels; tile gaps and round buttons remain LEGO geometry.
   const face = new THREE.Group();
-  face.position.x = 272 * CM;
+  face.position.x = 266 * CM;
   face.rotation.z = Math.PI / 2;
   parent.add(face);
   for (let z = 175; z < 345; z += 34) {
@@ -74,7 +85,7 @@ export function buildBed(cat, parent) {
   }
   for (let z = 190; z < 330; z += 20) {
     cat.placePart(parent, '15068.dat', M.duvet, 80 / 10, 55 / 4, (z + 10) / 10, {
-      rotY: Math.PI / 2, scale: [1, 0.75, 0.5],
+      rotY: -Math.PI / 2, scale: [1, 0.75, 0.5],
     });
   }
 }
@@ -97,38 +108,6 @@ export function buildBedsideTable(cat, parent, z0) {
   addCourse(cat, parent, TILE_PARTS, M.white, 245, z0, 280, z0 + 40, 56, 2);
   addBlock(cat, parent, M.wood, 244, z0 + 2, 246, z0 + 38, 48, 54);
   addCourse(cat, parent, TILE_PARTS, M.black, 244, z0 + 2, 245, z0 + 38, 54, 0.5);
-}
-
-export function buildBedsideToy(cat, parent) {
-  const M = MATERIALS;
-  for (const y of [58, 70]) {
-    cat.placePart(parent, '3941.dat', M.toyBlue, 26.1, y / 4, 36.5, {
-      scale: [1.05, 12 / 14, 1.05],
-    });
-  }
-  cat.placePart(parent, '15068.dat', M.toyBlue, 26.1, 82 / 4, 36.5, {
-    scale: [1.05, 0.5, 1.05],
-  });
-  for (const z of [354, 376]) {
-    cat.placePart(parent, '6141.dat', M.toyLilac, 26.1, 81 / 4, z / 10, {
-      scale: [0.6, 0.9, 0.6],
-    });
-    cat.placePart(parent, '11477.dat', M.toyPink, 25.9, 59 / 4, z / 10, {
-      rotY: z === 354 ? Math.PI : 0, scale: [0.65, 0.65, 0.45],
-    });
-  }
-  const face = new THREE.Group();
-  face.position.set(250.5 * CM, 70 * CM, 365 * CM);
-  face.rotation.z = Math.PI / 2;
-  parent.add(face);
-  cat.placePart(face, '4032a.dat', M.toyBelly, -0.1, 0, 0, {
-    scale: [0.7, 0.3, 0.65],
-  });
-  for (const z of [-0.45, 0.45]) {
-    cat.placePart(face, '98138.dat', M.black, 0.8, 0, z, {
-      scale: [0.3, 0.2, 0.3],
-    });
-  }
 }
 
 export function buildSillAppliance(cat, parent) {
@@ -159,8 +138,8 @@ export function buildSillPlant(cat, parent) {
   for (let i = 0; i < 6; i++) {
     cat.placePart(parent, i % 2 ? '37695.dat' : '32607.dat', i % 2 ? M.leafBright : M.leafGreen,
       14.8, 104 / 4, 44.3, {
-        rotY: i * Math.PI / 3, scale: [0.85, 0.65, 0.45],
-      });
+      rotY: i * Math.PI / 3, scale: [0.85, 0.65, 0.45],
+    });
   }
   for (const [x, height] of [[140, 141], [148, 150], [156, 132]]) {
     cat.placePart(parent, '30374.dat', M.leafGreen, x / 10, 108 / 4, 44.3, {

@@ -1,16 +1,15 @@
 import * as THREE from 'three';
 import { BRICK_PARTS, PLATE_PARTS, TILE_PARTS } from '../ldraw.js';
-import { MATERIALS } from './materials.js';
-import { addCourse, addBlock } from './geometry.js';
 import {
   buildBed,
-  buildPillow,
   buildBedsideTable,
-  buildBedsideToy,
+  buildPillow,
+  buildRadiator,
   buildSillAppliance,
   buildSillPlant,
-  buildRadiator,
 } from './furniture.js';
+import { addBlock, addCourse } from './geometry.js';
+import { MATERIALS } from './materials.js';
 
 function buildFloorAndBorder(cat, parent) {
   const M = MATERIALS;
@@ -97,9 +96,9 @@ export function buildBedroom(catalog) {
     ['shell', buildWallsAndWindows], ['floor', buildFloorAndBorder],
     ['window', buildWindowAssembly], ['radiator', buildRadiator],
     ['bed', buildBed], ['pillow', buildPillow],
-    ['table-north', (cat, parent) => buildBedsideTable(cat, parent, 135)],
+    ['table-north', (cat, parent) => buildBedsideTable(cat, parent, 105)],
     ['table-window', (cat, parent) => buildBedsideTable(cat, parent, 345)],
-    ['toy', buildBedsideToy], ['sill-appliance', buildSillAppliance], ['sill-plant', buildSillPlant],
+    ['sill-appliance', buildSillAppliance], ['sill-plant', buildSillPlant],
     ['entrance-trim', buildEntranceTrim], ['wardrobe-trim', buildWardrobeTrim],
   ]) {
     const raw = new THREE.Group();
