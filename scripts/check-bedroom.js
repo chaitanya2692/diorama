@@ -42,13 +42,10 @@ for (const [z, solid] of [[35, true], [36.5, false], [110.5, false], [112, true]
 for (const [x, solid] of [[105, true], [106.5, false], [171.5, false], [173, true]]) {
   assert.equal(cast(all, [x, 100, 20], [0, 0, -1], 50).length > 0, solid, `Wardrobe opening X=${x}`);
 }
-const pillows = room.children.filter((child) => child.name === 'pillow');
-assert.equal(pillows.length, 1, 'Exactly one pillow assembly');
-const pillow = new THREE.Box3().setFromObject(pillows[0]);
-for (const [actual, expected] of [
-  ...pillow.min.toArray().map((value, axis) => [value, [238, 56, 235][axis]]),
-  ...pillow.max.toArray().map((value, axis) => [value, [268, 72, 285][axis]]),
-]) assert.ok(Math.abs(actual / CM - expected) <= 2, 'Pillow fits the single-cushion bounds');
+const bedAndPillow = room.children.find((child) => child.name === 'bed-and-pillow');
+assert.ok(bedAndPillow, 'Bed and pillow share one assembly');
+const bounds = new THREE.Box3().setFromObject(bedAndPillow);
+assert.ok(Math.abs((bounds.min.z + bounds.max.z) / (2 * CM) - 245) < 0.1, 'Bed and pillow move together to the midpoint between tables');
 for (const mesh of all) {
   assert.ok(mesh.castShadow && mesh.receiveShadow, 'Merged geometry retains shadows');
   for (const value of mesh.geometry.attributes.position.array) assert.ok(Number.isFinite(value), 'Finite geometry');

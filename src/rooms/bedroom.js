@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { BRICK_PARTS, PLATE_PARTS, TILE_PARTS } from '../ldraw.js';
+import { BRICK_PARTS, PLATE_PARTS, STUD, TILE_PARTS } from '../ldraw.js';
 import {
   buildBed,
   buildBedsideTable,
@@ -95,7 +95,12 @@ export function buildBedroom(catalog) {
   for (const [name, builder] of [
     ['shell', buildWallsAndWindows], ['floor', buildFloorAndBorder],
     ['window', buildWindowAssembly], ['radiator', buildRadiator],
-    ['bed', buildBed], ['pillow', buildPillow],
+    ['bed-and-pillow', (cat, parent) => {
+      const group = new THREE.Group();
+      buildBed(cat, group);
+      buildPillow(cat, group);
+      parent.add(group);
+    }],
     ['table-north', (cat, parent) => buildBedsideTable(cat, parent, 105)],
     ['table-window', (cat, parent) => buildBedsideTable(cat, parent, 345)],
     ['sill-appliance', buildSillAppliance], ['sill-plant', buildSillPlant],
@@ -104,6 +109,7 @@ export function buildBedroom(catalog) {
     const raw = new THREE.Group();
     builder(catalog, raw);
     const assembly = catalog.mergeStaticGroup(raw);
+    if (name === 'bed-and-pillow') assembly.position.z = -15 * (STUD / 10);
     assembly.name = name;
     room.add(assembly);
   }

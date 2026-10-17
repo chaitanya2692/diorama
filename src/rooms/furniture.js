@@ -42,11 +42,7 @@ export function buildBed(cat, parent) {
   addBlock(cat, parent, M.whiteSoft, 75, 185, 270, 335, 40, 51);
   addCourse(cat, parent, TILE_PARTS, M.whiteSoft, 75, 185, 270, 335, 51, 4);
   addBlock(cat, parent, M.headboard, 266, 175, 280, 345, 10, 115);
-  // for (let z = 170; z < 340; z += 10) {
-  //   cat.placePart(parent, '49307.dat', M.headboard, 273 / 10, 115 / 4, (z + 10) / 10, {
-  //     rotY: Math.PI / 2,
-  //   });
-  // }
+
   for (let z = 170; z < 340; z += 10) {
     cat.placePart(parent, '49307.dat', M.headboard, 273 / 10, 115 / 4.4, (z + 10) / 10, {
       rotY: Math.PI / 2,
